@@ -21,13 +21,9 @@ class Main extends Sprite
   var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
   var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
   var initialState:Class<FlxState> = funkin.InitState; // The FlxState the game starts with.
-  var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
-  #if web
-  var framerate:Int = 60; // How many frames per second the game should run at.
-  #else
+  // var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
   // TODO: This should probably be in the options menu?
-  var framerate:Int = 144; // How many frames per second the game should run at.
-  #end
+  var framerate:Int = 60; // How many frames per second the game should run at.
   var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
   var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 
@@ -99,6 +95,12 @@ class Main extends Sprite
     // addChild gets called by the user settings code.
     // TODO: disabled on HTML5 (todo: find another method that works?)
     memoryCounter = new MemoryCounter(10, 13, 0xFFFFFF);
+    #end
+
+    #if !web
+    // improvised v-sync
+    // TODO: add fps option
+    framerate = lime.app.Application.current.window.displayMode.refreshRate;
     #end
 
     // George recommends binding the save before FlxGame is created.
