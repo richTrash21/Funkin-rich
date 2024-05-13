@@ -52,8 +52,7 @@ class Save
    */
   public function new(?data:RawSaveData)
   {
-    if (data == null) this.data = Save.getDefault();
-    else this.data = data;
+    this.data = data ?? Save.getDefault();
   }
 
   public static function getDefault():RawSaveData

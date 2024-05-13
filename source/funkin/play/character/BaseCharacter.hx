@@ -420,7 +420,8 @@ class BaseCharacter extends Bopper
     {
       if (isSinging()) return;
 
-      if (['hey', 'cheer'].contains(getCurrentAnimation()) && !isAnimationFinished()) return;
+      var currentAnimation:String = getCurrentAnimation();
+      if ((currentAnimation == 'hey' || currentAnimation == 'cheer') && !isAnimationFinished()) return;
     }
 
     // Prevent dancing while another animation is playing.
@@ -452,8 +453,7 @@ class BaseCharacter extends Bopper
         || PlayerSettings.player2.controls.NOTE_UP_P
         || PlayerSettings.player2.controls.NOTE_RIGHT_P;
 
-      default:
-        false;
+      default: false;
     }
   }
 
@@ -479,8 +479,7 @@ class BaseCharacter extends Bopper
         || PlayerSettings.player2.controls.NOTE_UP
         || PlayerSettings.player2.controls.NOTE_RIGHT;
 
-      default:
-        false;
+      default: false;
     }
   }
 
