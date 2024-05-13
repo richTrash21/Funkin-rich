@@ -438,24 +438,23 @@ class BaseCharacter extends Bopper
   function justPressedNote(player:Int = 1):Bool
   {
     // Returns true if at least one of LEFT, DOWN, UP, or RIGHT is being held.
-    switch (player)
+    return switch (player)
     {
       case 1:
-        return [
-          PlayerSettings.player1.controls.NOTE_LEFT_P,
-          PlayerSettings.player1.controls.NOTE_DOWN_P,
-          PlayerSettings.player1.controls.NOTE_UP_P,
-          PlayerSettings.player1.controls.NOTE_RIGHT_P,
-        ].contains(true);
+        PlayerSettings.player1.controls.NOTE_LEFT_P
+        || PlayerSettings.player1.controls.NOTE_DOWN_P
+        || PlayerSettings.player1.controls.NOTE_UP_P
+        || PlayerSettings.player1.controls.NOTE_RIGHT_P;
+
       case 2:
-        return [
-          PlayerSettings.player2.controls.NOTE_LEFT_P,
-          PlayerSettings.player2.controls.NOTE_DOWN_P,
-          PlayerSettings.player2.controls.NOTE_UP_P,
-          PlayerSettings.player2.controls.NOTE_RIGHT_P,
-        ].contains(true);
+        PlayerSettings.player2.controls.NOTE_LEFT_P
+        || PlayerSettings.player2.controls.NOTE_DOWN_P
+        || PlayerSettings.player2.controls.NOTE_UP_P
+        || PlayerSettings.player2.controls.NOTE_RIGHT_P;
+
+      default:
+        false;
     }
-    return false;
   }
 
   /**
@@ -466,24 +465,23 @@ class BaseCharacter extends Bopper
   function isHoldingNote(player:Int = 1):Bool
   {
     // Returns true if at least one of LEFT, DOWN, UP, or RIGHT is being held.
-    switch (player)
+    return switch (player)
     {
       case 1:
-        return [
-          PlayerSettings.player1.controls.NOTE_LEFT,
-          PlayerSettings.player1.controls.NOTE_DOWN,
-          PlayerSettings.player1.controls.NOTE_UP,
-          PlayerSettings.player1.controls.NOTE_RIGHT,
-        ].contains(true);
+        PlayerSettings.player1.controls.NOTE_LEFT
+        || PlayerSettings.player1.controls.NOTE_DOWN
+        || PlayerSettings.player1.controls.NOTE_UP
+        || PlayerSettings.player1.controls.NOTE_RIGHT;
+
       case 2:
-        return [
-          PlayerSettings.player2.controls.NOTE_LEFT,
-          PlayerSettings.player2.controls.NOTE_DOWN,
-          PlayerSettings.player2.controls.NOTE_UP,
-          PlayerSettings.player2.controls.NOTE_RIGHT,
-        ].contains(true);
+        PlayerSettings.player2.controls.NOTE_LEFT
+        || PlayerSettings.player2.controls.NOTE_DOWN
+        || PlayerSettings.player2.controls.NOTE_UP
+        || PlayerSettings.player2.controls.NOTE_RIGHT;
+
+      default:
+        false;
     }
-    return false;
   }
 
   /**
