@@ -5,6 +5,9 @@
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
 
+	<!-- Haxelib path fix (thx PurSnake) -->
+	<setenv name="HAXEPATH" value="./"/>
+
 	<!--
 		Define the OpenFL sprite which displays the preloader.
 		You can't replace the preloader's logic here, sadly, but you can extend it.
