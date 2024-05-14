@@ -81,6 +81,9 @@ class Save
           // Reasonable defaults.
           naughtyness: true,
           downscroll: false,
+          ghostTapping: false,
+          // improvised v-sync
+          framerate: #if web 60 #else flixel.math.FlxMath.maxInt(60, lime.app.Application.current.window.displayMode.refreshRate) #end,
           flashingLights: true,
           zoomCamera: true,
           debugDisplay: false,
@@ -845,6 +848,19 @@ typedef SaveDataOptions =
    * @default `false`
    */
   var downscroll:Bool;
+
+  /**
+   * If true, the player will not receive the ghost miss penalty if there are no notes within the hit window.
+   * This is the thing people have been begging for forever lolol.
+   * @default `false`
+   */
+  var ghostTapping:Bool;
+
+  /**
+   * Framerate.
+   * @default `60` on web targets, on native may vary.
+   */
+  var framerate:Int;
 
   /**
    * If disabled, flashing lights in the main menu and other areas will be less intense.

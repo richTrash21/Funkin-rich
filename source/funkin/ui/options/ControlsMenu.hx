@@ -1,5 +1,6 @@
 package funkin.ui.options;
 
+import funkin.util.Constants;
 import funkin.util.InputUtil;
 import flixel.FlxCamera;
 import flixel.FlxObject;
@@ -141,7 +142,7 @@ class ControlsMenu extends funkin.ui.options.OptionsState.Page
     else
       camFollow.y = controlGrid.selectedItem.y;
 
-    menuCamera.follow(camFollow, null, 0.06);
+    menuCamera.follow(camFollow, null, Constants.DEFAULT_CAMERA_FOLLOW_RATE_MENU);
     var margin = 100;
     menuCamera.deadzone.set(0, margin, menuCamera.width, menuCamera.height - margin * 2);
     menuCamera.minScrollY = 0;

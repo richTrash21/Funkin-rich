@@ -4,6 +4,7 @@ import flixel.system.FlxBasePreloader;
 import flixel.util.FlxColor;
 import funkin.data.song.SongData.SongTimeFormat;
 import lime.app.Application;
+import funkin.Preferences;
 
 /**
  * A store of unchanging, globally relevant values.
@@ -43,17 +44,14 @@ class Constants
    */
   public static final VERSION_SUFFIX:String = #if (DEBUG || FORCE_DEBUG_VERSION) ' PROTOTYPE' #else '' #end;
 
-  #if (debug || FORCE_DEBUG_VERSION)
   static function get_VERSION():String
   {
+    #if (debug || FORCE_DEBUG_VERSION)
     return 'v${Application.current.meta.get('version')} (${GIT_BRANCH} : ${GIT_HASH}${GIT_HAS_LOCAL_CHANGES ? ' : MODIFIED' : ''})' + VERSION_SUFFIX;
-  }
-  #else
-  static function get_VERSION():String
-  {
+    #else
     return 'v${Application.current.meta.get('version')}' + VERSION_SUFFIX;
+    #end
   }
-  #end
 
   /**
    * URL DATA
@@ -359,11 +357,7 @@ class Constants
    * 1 = The preloader waits for 1 second before moving to the next step.
    *     The progress bare is automatically rescaled to match.
    */
-  #if debug
-  public static final PRELOADER_MIN_STAGE_TIME:Float = 0.0;
-  #else
-  public static final PRELOADER_MIN_STAGE_TIME:Float = 0.1;
-  #end
+  public static final PRELOADER_MIN_STAGE_TIME:Float = #if debug 0.0 #else 0.1 #end;
 
   /**
    * HEALTH VALUES
@@ -497,7 +491,14 @@ class Constants
    * If true, the player will not receive the ghost miss penalty if there are no notes within the hit window.
    * This is the thing people have been begging for forever lolol.
    */
-  public static final GHOST_TAPPING:Bool = false;
+  @:deprecated("Deprecated! Use Preferences.ghostTapping instead!")
+  public static var GHOST_TAPPING(get, set):Bool;
+
+  @:noCompletion inline static function get_GHOST_TAPPING():Bool
+    return Preferences.ghostTapping;
+
+  @:noCompletion inline static function set_GHOST_TAPPING(value:Bool):Bool
+    return Preferences.ghostTapping = value;
 
   /**
    * The maximum number of previous file paths for the Chart Editor to remember.
@@ -534,4 +535,14 @@ class Constants
    * 0.04 = 4% of distance per frame.
    */
   public static final DEFAULT_CAMERA_FOLLOW_RATE:Float = 0.04;
+
+  /**
+   * The rate at which the camera lerps to its target.
+   * Mainly used in the menus.
+   * 0.06 = 6% of distance per frame.
+   */
+  public static final DEFAULT_CAMERA_FOLLOW_RATE_MENU:Float = 0.06;
+
+  public static final MIN_FRAMERATE:Int = 60;
+  public static final MAX_FRAMERATE:Int = 540;
 }

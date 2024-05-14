@@ -131,6 +131,7 @@ class FreeplayState extends MusicBeatSubState
   var exitMovers:ExitMoverData = new Map();
 
   var stickerSubState:StickerSubState;
+  var funnyCam:FunkinCamera;
 
   public static var rememberedDifficulty:Null<String> = Constants.DEFAULT_DIFFICULTY;
   public static var rememberedSongId:Null<String> = 'tutorial';
@@ -211,10 +212,10 @@ class FreeplayState extends MusicBeatSubState
 
     // LOAD CHARACTERS
 
-    trace(FlxG.width);
-    trace(FlxG.camera.zoom);
-    trace(FlxG.camera.initialZoom);
-    trace(FlxCamera.defaultZoom);
+    // trace(FlxG.width);
+    // trace(FlxG.camera.zoom);
+    // trace(FlxG.camera.initialZoom);
+    // trace(FlxCamera.defaultZoom);
 
     var pinkBack:FunkinSprite = FunkinSprite.create('freeplay/pinkBack');
     pinkBack.color = 0xFFFFD4E9; // sets it to pink!
@@ -527,12 +528,15 @@ class FreeplayState extends MusicBeatSubState
       orangeBackShit.visible = true;
       alsoOrangeLOL.visible = true;
       grpTxtScrolls.visible = true;
+
+      // render optimisation
+      _parentState.persistentDraw = false;
     });
 
     generateSongList(null, false);
 
     // dedicated camera for the state so we don't need to fuk around with camera scrolls from the mainmenu / elsewhere
-    var funnyCam:FunkinCamera = new FunkinCamera('freeplayFunny', 0, 0, FlxG.width, FlxG.height);
+    funnyCam = new FunkinCamera('freeplayFunny', 0, 0, FlxG.width, FlxG.height);
     funnyCam.bgColor = FlxColor.TRANSPARENT;
     FlxG.cameras.add(funnyCam, false);
 
@@ -910,6 +914,7 @@ class FreeplayState extends MusicBeatSubState
 
     if (controls.BACK)
     {
+      busy = true;
       FlxTween.globalManager.clear();
       FlxTimer.globalManager.clear();
       dj.onIntroDone.removeAll();
@@ -985,6 +990,7 @@ class FreeplayState extends MusicBeatSubState
     {
       clearDaCache(daSong.songName);
     }
+    FlxG.cameras.remove(funnyCam);
   }
 
   function changeDiff(change:Int = 0, force:Bool = false):Void
