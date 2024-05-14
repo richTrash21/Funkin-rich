@@ -99,6 +99,7 @@ class Main extends Sprite
     // George recommends binding the save before FlxGame is created.
     Save.load();
 
+    // fix for vanilla save data
     if (framerate == null) framerate = FlxMath.minInt(60, Save.instance.options.framerate);
 
     var game:FlxGame = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, startFullscreen);
