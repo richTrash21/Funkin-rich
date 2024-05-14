@@ -490,6 +490,8 @@ class Constants
   /**
    * If true, the player will not receive the ghost miss penalty if there are no notes within the hit window.
    * This is the thing people have been begging for forever lolol.
+   *
+   * NOTE: redirects to Preferences.ghostTapping!
    */
   @:deprecated("Deprecated! Use Preferences.ghostTapping instead!")
   public static var GHOST_TAPPING(get, set):Bool;
@@ -539,9 +541,9 @@ class Constants
   /**
    * The rate at which the camera lerps to its target.
    * Mainly used in the menus.
-   * 0.06 = 6% of distance per frame.
+   * 0.12 = 12% of distance per frame.
    */
-  public static final DEFAULT_CAMERA_FOLLOW_RATE_MENU:Float = 0.06;
+  public static final DEFAULT_CAMERA_FOLLOW_RATE_MENU:Float = 0.12;
 
   public static final MIN_FRAMERATE:Int = 60;
   public static final MAX_FRAMERATE:Int = 540;

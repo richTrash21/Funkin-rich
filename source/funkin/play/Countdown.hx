@@ -219,7 +219,7 @@ class Countdown
     var countdownSprite:FunkinSprite = FunkinSprite.create(spritePath);
     countdownSprite.scrollFactor.set(0, 0);
 
-    if (isPixelStyle) countdownSprite.setGraphicSize(Std.int(countdownSprite.width * Constants.PIXEL_ART_SCALE));
+    if (isPixelStyle) countdownSprite.setGraphicSize(countdownSprite.width * Constants.PIXEL_ART_SCALE);
 
     countdownSprite.antialiasing = !isPixelStyle;
 
@@ -227,11 +227,12 @@ class Countdown
     countdownSprite.screenCenter();
 
     // Fade sprite in, then out, then destroy it.
-    FlxTween.tween(countdownSprite, {y: countdownSprite.y += 100, alpha: 0}, Conductor.instance.beatLengthMs / 1000,
+    FlxTween.tween(countdownSprite, {/*y: countdownSprite.y += 100,*/ alpha: 0}, Conductor.instance.beatLengthMs / 1000,
       {
         ease: FlxEase.cubeInOut,
-        onComplete: function(twn:FlxTween) {
+        onComplete: function(_) {
           countdownSprite.destroy();
+          PlayState.instance.remove(countdownSprite);
         }
       });
 

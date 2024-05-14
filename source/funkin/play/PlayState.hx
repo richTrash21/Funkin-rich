@@ -66,7 +66,7 @@ import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
 import openfl.Lib;
 #if discord_rpc
-import Discord.DiscordClient;
+import funkin.api.discord.Discord.DiscordClient;
 #end
 
 /**
@@ -624,20 +624,20 @@ class PlayState extends MusicBeatSubState
     if (!assertChartExists()) return;
 
     // TODO: Add something to toggle this on!
-    if (false)
-    {
-      // Displays the camera follow point as a sprite for debug purposes.
-      var cameraFollowPoint = new FunkinSprite(0, 0);
-      cameraFollowPoint.makeSolidColor(8, 8, 0xFF00FF00);
-      cameraFollowPoint.visible = false;
-      cameraFollowPoint.zIndex = 1000000;
-      this.cameraFollowPoint = cameraFollowPoint;
-    }
-    else
-    {
-      // Camera follow point is an invisible point in space.
-      cameraFollowPoint = new FlxObject(0, 0);
-    }
+    /*if (false)
+      {
+        // Displays the camera follow point as a sprite for debug purposes.
+        var cameraFollowPoint = new FunkinSprite(0, 0);
+        cameraFollowPoint.makeSolidColor(8, 8, 0xFF00FF00);
+        cameraFollowPoint.visible = false;
+        cameraFollowPoint.zIndex = 1000000;
+        this.cameraFollowPoint = cameraFollowPoint;
+      }
+      else
+      { */
+    // Camera follow point is an invisible point in space.
+    cameraFollowPoint = new FlxObject(0, 0);
+    // }
 
     // Reduce physics accuracy (who cares!!!) to improve animation quality.
     FlxG.fixedTimestep = false;
@@ -647,14 +647,20 @@ class PlayState extends MusicBeatSubState
     // This state receives draw calls even when a substate is active.
     this.persistentDraw = true;
 
-    // Stop any pre-existing music.
-    if (!overrideMusic && FlxG.sound.music != null) FlxG.sound.music.stop();
-
-    // Prepare the current song's instrumental and vocals to be played.
-    if (!overrideMusic && currentChart != null)
+    if (!overrideMusic)
     {
-      currentChart.cacheInst();
-      currentChart.cacheVocals();
+      // Stop any pre-existing music.
+      if (FlxG.sound.music != null) FlxG.sound.music.stop();
+
+      // Prepare the current song's instrumental and vocals to be played.
+      if (currentChart != null)
+      {
+        currentChart.cacheInst();
+        currentChart.cacheVocals();
+
+        currentChart.playInst(0.0, false);
+        FlxG.sound.music.stop();
+      }
     }
 
     // Prepare the Conductor.
@@ -848,9 +854,13 @@ class PlayState extends MusicBeatSubState
         if (vocals != null) vocals.stop();
         vocals = currentChart.buildVocals();
 
-        if (vocals.members.length == 0)
+        if (vocals.members.length == 0) trace('WARNING: No vocals found for this song.');
+        else
         {
-          trace('WARNING: No vocals found for this song.');
+          vocals.volume = 0.0;
+          vocals.play();
+          vocals.stop();
+          vocals.volume = 1.0;
         }
       }
       vocals.pause();
@@ -961,7 +971,7 @@ class PlayState extends MusicBeatSubState
         }
 
         #if discord_rpc
-        DiscordClient.changePresence(detailsPausedText, currentSong.song + ' (' + storyDifficultyText + ')', iconRPC);
+        DiscordClient.changePresence(detailsPausedText, '$currentSong ($storyDifficultyText)', iconRPC);
         #end
       }
     }
@@ -1051,7 +1061,7 @@ class PlayState extends MusicBeatSubState
 
         #if discord_rpc
         // Game Over doesn't get his own variable because it's only used here
-        DiscordClient.changePresence('Game Over - ' + detailsText, currentSong.song + ' (' + storyDifficultyText + ')', iconRPC);
+        DiscordClient.changePresence('Game Over - $detailsText', '$currentSong ($storyDifficultyText)', iconRPC);
         #end
       }
       else if (isPlayerDying)
@@ -1173,6 +1183,7 @@ class PlayState extends MusicBeatSubState
         cameraFollowTween.active = false;
         cameraTweensPausedBySubState.add(cameraFollowTween);
       }
+      FlxG.camera.followLerp = 0.0;
 
       if (cameraZoomTween != null && cameraZoomTween.active)
       {
@@ -1214,6 +1225,7 @@ class PlayState extends MusicBeatSubState
         camTween.active = true;
       }
       cameraTweensPausedBySubState.clear();
+      FlxG.camera.followLerp = Constants.DEFAULT_CAMERA_FOLLOW_RATE;
 
       if (currentConversation != null)
       {
@@ -1227,7 +1239,7 @@ class PlayState extends MusicBeatSubState
       Countdown.resumeCountdown();
 
       #if discord_rpc
-      if (startTimer.finished)
+      if (Countdown.countdownStep == AFTER)
       {
         DiscordClient.changePresence(detailsText, '${currentChart.songName} ($storyDifficultyText)', iconRPC, true,
           currentSongLengthMs - Conductor.instance.songPosition);
@@ -1254,16 +1266,12 @@ class PlayState extends MusicBeatSubState
    */
   public override function onFocus():Void
   {
-    if (health > Constants.HEALTH_MIN && !paused && FlxG.autoPause)
+    if (health > Constants.HEALTH_MIN && !isGamePaused && FlxG.autoPause)
     {
-      if (Conductor.instance.songPosition > 0.0) DiscordClient.changePresence(detailsText, currentSong.song
-        + ' ('
-        + storyDifficultyText
-        + ')', iconRPC, true,
-        currentSongLengthMs
-        - Conductor.instance.songPosition);
+      if (Conductor.instance.songPosition > 0.0) DiscordClient.changePresence(detailsText, 'currentSong ($storyDifficultyText)', iconRPC, true,
+        currentSongLengthMs - Conductor.instance.songPosition);
       else
-        DiscordClient.changePresence(detailsText, currentSong.song + ' (' + storyDifficultyText + ')', iconRPC);
+        DiscordClient.changePresence(detailsText, '$currentSong ($storyDifficultyText)', iconRPC);
     }
 
     super.onFocus();
@@ -1274,8 +1282,8 @@ class PlayState extends MusicBeatSubState
    */
   public override function onFocusLost():Void
   {
-    if (health > Constants.HEALTH_MIN && !paused && FlxG.autoPause) DiscordClient.changePresence(detailsPausedText,
-      currentSong.song + ' (' + storyDifficultyText + ')', iconRPC);
+    if (health > Constants.HEALTH_MIN && !isGamePaused && FlxG.autoPause) DiscordClient.changePresence(detailsPausedText,
+      '$currentSong ($storyDifficultyText)', iconRPC);
 
     super.onFocusLost();
   }
@@ -1723,8 +1731,8 @@ class PlayState extends MusicBeatSubState
     add(opponentStrumline);
 
     // Position the player strumline on the right half of the screen
-    playerStrumline.x = FlxG.width / 2 + Constants.STRUMLINE_X_OFFSET; // Classic style
-    // playerStrumline.x = FlxG.width - playerStrumline.width - Constants.STRUMLINE_X_OFFSET; // Centered style
+    // playerStrumline.x = FlxG.width / 2 + Constants.STRUMLINE_X_OFFSET; // Classic style
+    playerStrumline.x = FlxG.width - playerStrumline.width - Constants.STRUMLINE_X_OFFSET; // Centered style
     playerStrumline.y = Preferences.downscroll ? FlxG.height - playerStrumline.height - Constants.STRUMLINE_Y_OFFSET : Constants.STRUMLINE_Y_OFFSET;
     playerStrumline.zIndex = 1001;
     playerStrumline.cameras = [camHUD];
@@ -1748,8 +1756,8 @@ class PlayState extends MusicBeatSubState
   function initDiscord():Void
   {
     #if discord_rpc
-    storyDifficultyText = difficultyString();
-    iconRPC = currentSong.player2;
+    storyDifficultyText = currentDifficulty;
+    iconRPC = currentStage.getDad().characterId;
 
     // To avoid having duplicate images in Discord assets
     switch (iconRPC)
@@ -1763,7 +1771,7 @@ class PlayState extends MusicBeatSubState
     }
 
     // String that contains the mode defined here so it isn't necessary to call changePresence for each mode
-    detailsText = isStoryMode ? 'Story Mode: Week $storyWeek' : 'Freeplay';
+    detailsText = PlayStatePlaylist.isStoryMode ? 'Story Mode: Week ${PlayStatePlaylist.campaignId}' : 'Freeplay';
     detailsPausedText = 'Paused - $detailsText';
 
     // Updating Discord Rich Presence.
@@ -1796,9 +1804,13 @@ class PlayState extends MusicBeatSubState
       if (vocals != null) vocals.stop();
       vocals = currentChart.buildVocals();
 
-      if (vocals.members.length == 0)
+      if (vocals.members.length == 0) trace('WARNING: No vocals found for this song.');
+      else
       {
-        trace('WARNING: No vocals found for this song.');
+        vocals.volume = 0.0;
+        vocals.play();
+        vocals.stop();
+        vocals.volume = 1.0;
       }
     }
 
@@ -3024,18 +3036,20 @@ class PlayState extends MusicBeatSubState
     var targetDad:Bool = currentStage.getDad() != null && currentStage.getDad().characterId == 'gf';
     var targetBF:Bool = currentStage.getGirlfriend() == null && !targetDad;
 
+    var target:FlxObject;
     if (targetBF)
     {
-      FlxG.camera.follow(currentStage.getBoyfriend(), null, 0.05);
+      target = currentStage.getBoyfriend();
     }
     else if (targetDad)
     {
-      FlxG.camera.follow(currentStage.getDad(), null, 0.05);
+      target = currentStage.getDad();
     }
     else
     {
-      FlxG.camera.follow(currentStage.getGirlfriend(), null, 0.05);
+      target = currentStage.getGirlfriend();
     }
+    FlxG.camera.follow(target, null, 0.05);
 
     // TODO: Make target offset configurable.
     // In the meantime, we have to replace the zoom animation with a fade out.
@@ -3136,7 +3150,7 @@ class PlayState extends MusicBeatSubState
       cancelAllCameraTweens();
     }
 
-    FlxG.camera.follow(cameraFollowPoint, LOCKON, 0.04);
+    FlxG.camera.follow(cameraFollowPoint, LOCKON, Constants.DEFAULT_CAMERA_FOLLOW_RATE);
     FlxG.camera.targetOffset.set();
 
     if (resetZoom)

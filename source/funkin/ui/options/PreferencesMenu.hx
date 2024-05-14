@@ -46,7 +46,14 @@ class PreferencesMenu extends Page
 
     items.onChange.add(function(selected) {
       camFollow.y = selected.y;
+      items.forEach(function(daItem:TextMenuItem) {
+        daItem.x = items.selectedItem == daItem ? 150 : 120;
+      });
+      preferenceItems.forEachOfType(CounterPreferenceItem, (item) -> {
+        item.active = item.ID == items.selectedIndex;
+      });
     });
+    items.selectItem(items.selectedIndex);
   }
 
   /**
@@ -62,7 +69,7 @@ class PreferencesMenu extends Page
       Preferences.downscroll = value;
     }, Preferences.downscroll);
 
-    createPrefItemCheckbox('Ghost Tapping', 'Enable to disable ghost misses', function(value:Bool):Void {
+    createPrefItemCheckbox('Ghost Tapping', 'Disables ghost misses', function(value:Bool):Void {
       Preferences.ghostTapping = value;
     }, Preferences.ghostTapping);
 
@@ -104,24 +111,10 @@ class PreferencesMenu extends Page
   function createPrefItemCounter(prefName:String, prefDesc:String, onChange:Int->Void, defaultValue:Int, minValue:Int, maxValue:Int, step:Int = 1):Void
   {
     final posY = 120 * items.length;
-    final counter = new CounterPreferenceItem(20, posY + 55, defaultValue, minValue, maxValue, onChange);
+    final counter = new CounterPreferenceItem(20, posY + 54, defaultValue, minValue, maxValue, onChange);
     counter.ID = items.length;
     items.createItem(120, posY + 30, prefName, AtlasFont.BOLD);
     preferenceItems.add(counter);
-  }
-
-  override function update(elapsed:Float)
-  {
-    super.update(elapsed);
-
-    // Indent the selected item.
-    // TODO: Only do this on menu change?
-    items.forEach(function(daItem:TextMenuItem) {
-      daItem.x = items.selectedItem == daItem ? 150 : 120;
-    });
-    /*preferenceItems.forEachOfType(CounterPreferenceItem, (item) -> {
-      item.active = item.ID == items.selectedIndex;
-    });*/
   }
 }
 
@@ -183,8 +176,8 @@ class CounterPreferenceItem extends FlxText
   var maxValue:Int;
   var step:Int;
 
-  var holdTimer:Float = 0.0;
-  var holdValue:Float = 0.0;
+  var holdTimer = 0.0;
+  var holdValue = 0.0;
 
   public function new(x:Float, y:Float, defaultValue:Int = 0, minValue:Int = 0, maxValue:Int = 1, onChange:Int->Void, step:Int = 1)
   {

@@ -73,13 +73,14 @@ class Preferences
 
   static function get_framerate():Int
   {
-    return Save?.instance?.options?.framerate ?? 60;
+    return Save?.instance?.options?.framerate ?? FlxG.updateFramerate;
   }
 
   static function set_framerate(value:Int):Int
   {
     #if web
     FlxG.log.warn("You can't set framerate on web targets!");
+    return FlxG.updateFramerate;
     #else
     FlxG.updateFramerate = value;
     FlxG.drawFramerate = value;
@@ -87,8 +88,8 @@ class Preferences
     var save:Save = Save.instance;
     save.options.framerate = value;
     save.flush();
-    #end
     return value;
+    #end
   }
 
   /**

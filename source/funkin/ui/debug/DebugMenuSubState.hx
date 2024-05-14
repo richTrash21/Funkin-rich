@@ -11,6 +11,7 @@ import funkin.ui.MusicBeatSubState;
 import funkin.util.logging.CrashHandler;
 import flixel.addons.transition.FlxTransitionableState;
 import funkin.util.FileUtil;
+import funkin.util.Constants;
 
 class DebugMenuSubState extends MusicBeatSubState
 {
@@ -33,7 +34,7 @@ class DebugMenuSubState extends MusicBeatSubState
     add(camFocusPoint);
 
     // Follow the camera focus as we scroll.
-    FlxG.camera.follow(camFocusPoint, null, 0.06);
+    FlxG.camera.follow(camFocusPoint, null, Constants.DEFAULT_CAMERA_FOLLOW_RATE_MENU);
 
     // Create the green background.
     var menuBG = new FlxSprite().loadGraphic(Paths.image('menuDesat'));

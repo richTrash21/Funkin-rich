@@ -1,13 +1,10 @@
 package funkin.api.discord;
 
-import Sys.sleep;
 #if discord_rpc
 import discord_rpc.DiscordRpc;
-#end
 
 class DiscordClient
 {
-  #if discord_rpc
   public function new()
   {
     trace("Discord Client starting...");
@@ -23,7 +20,7 @@ class DiscordClient
     while (true)
     {
       DiscordRpc.process();
-      sleep(2);
+      Sys.sleep(1.0);
       // trace("Discord Client Update");
     }
 
@@ -87,5 +84,5 @@ class DiscordClient
 
     // trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
   }
-  #end
 }
+#end

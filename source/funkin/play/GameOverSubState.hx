@@ -240,7 +240,7 @@ class GameOverSubState extends MusicBeatSubState
     }
 
     // KEYBOARD ONLY: Return to the menu when pressing the assigned key.
-    if (controls.BACK)
+    if (controls.BACK && !isEnding)
     {
       blueballed = false;
       PlayState.instance.deathCounter = 0;
@@ -436,13 +436,14 @@ class GameOverSubState extends MusicBeatSubState
   public static function playBlueBalledSFX():Void
   {
     blueballed = true;
-    if (Assets.exists(Paths.sound('gameplay/gameover/fnf_loss_sfx' + blueBallSuffix)))
+    final sound = Paths.sound('gameplay/gameover/fnf_loss_sfx' + blueBallSuffix);
+    if (Assets.exists(sound))
     {
-      FunkinSound.playOnce(Paths.sound('gameplay/gameover/fnf_loss_sfx' + blueBallSuffix));
+      FunkinSound.playOnce(sound);
     }
     else
     {
-      FlxG.log.error('Missing blue ball sound effect: ' + Paths.sound('gameplay/gameover/fnf_loss_sfx' + blueBallSuffix));
+      FlxG.log.error('Missing blue ball sound effect: ' + sound);
     }
   }
 

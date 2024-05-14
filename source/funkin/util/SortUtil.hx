@@ -144,4 +144,19 @@ class SortUtil
     if (defaultValues.contains(b)) return 1;
     return alphabetically(a, b);
   }
+
+  /**
+   * You can use this function in FlxTypedGroup.sort() to sort FlxObjects by their ID's.
+   * The value defaults to 0.
+   *
+   * @param order Either `FlxSort.ASCENDING` or `FlxSort.DESCENDING`
+   * @param a The first FlxObject to compare.
+   * @param b The second FlxObject to compare.
+   * @return 1 if `a` has a higher ID, -1 if `b` has a higher ID.
+   */
+  public static inline function byID(order:Int, a:FlxBasic, b:FlxBasic):Int
+  {
+    if (a == null || b == null) return 0;
+    return FlxSort.byValues(order, a.ID, b.ID);
+  }
 }

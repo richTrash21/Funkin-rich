@@ -28,7 +28,7 @@ import funkin.ui.story.StoryMenuState;
 import funkin.ui.Prompt;
 import funkin.util.WindowUtil;
 #if discord_rpc
-import Discord.DiscordClient;
+import funkin.api.discord.Discord.DiscordClient;
 #end
 #if newgrounds
 import funkin.ui.NgPrompt;
@@ -59,9 +59,8 @@ class MainMenuState extends MusicBeatState
     persistentDraw = true;
 
     var bg:FlxSprite = new FlxSprite(Paths.image('menuBG'));
-    bg.scrollFactor.x = 0;
-    bg.scrollFactor.y = 0.17;
-    bg.setGraphicSize(Std.int(bg.width * 1.2));
+    bg.scrollFactor.set(0, 0.17);
+    bg.setGraphicSize(bg.width * 1.2);
     bg.updateHitbox();
     bg.screenCenter();
     add(bg);
@@ -69,13 +68,11 @@ class MainMenuState extends MusicBeatState
     camFollow = new FlxObject(0, 0, 1, 1);
     add(camFollow);
 
-    magenta = new FlxSprite(Paths.image('menuBGMagenta'));
-    magenta.scrollFactor.x = bg.scrollFactor.x;
-    magenta.scrollFactor.y = bg.scrollFactor.y;
-    magenta.setGraphicSize(Std.int(bg.width));
+    magenta = new FlxSprite(bg.x, bg.y, Paths.image('menuDesat'));
+    magenta.scrollFactor.copyFrom(bg.scrollFactor);
+    magenta.setGraphicSize(bg.width);
     magenta.updateHitbox();
-    magenta.x = bg.x;
-    magenta.y = bg.y;
+    magenta.color = 0xFFfd719b;
     magenta.visible = false;
 
     // TODO: Why doesn't this line compile I'm going fucking feral
@@ -86,14 +83,9 @@ class MainMenuState extends MusicBeatState
     add(menuItems);
     menuItems.onChange.add(onMenuItemChange);
     menuItems.onAcceptPress.add(function(_) {
-      if (_.name == 'freeplay')
-      {
-        magenta.visible = true;
-      }
-      else
-      {
-        FlxFlicker.flicker(magenta, 1.1, 0.15, false, true);
-      }
+      // if (_.name == 'freeplay') magenta.visible = true;
+      // else
+      FlxFlicker.flicker(magenta, 1.1, 0.15, false, true);
     });
 
     menuItems.enabled = true; // can move on intro
@@ -327,7 +319,7 @@ class MainMenuState extends MusicBeatState
     if (controls.DEBUG_MENU)
     {
       persistentUpdate = false;
-
+      subStateClosed.addOnce(_ -> resetCamStuff());
       FlxG.state.openSubState(new DebugMenuSubState());
     }
     #end
