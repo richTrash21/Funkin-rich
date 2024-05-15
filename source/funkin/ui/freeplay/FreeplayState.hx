@@ -919,7 +919,6 @@ class FreeplayState extends MusicBeatSubState
     if (controls.BACK)
     {
       busy = true;
-      busy = true;
       FlxTween.globalManager.clear();
       FlxTimer.globalManager.clear();
       dj.onIntroDone.removeAll();
