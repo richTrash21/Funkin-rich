@@ -642,12 +642,8 @@ class Strumline extends FlxSpriteGroup
     {
       splash.play(direction);
 
-      splash.x = this.x;
-      splash.x += getXPos(direction);
-      splash.x += INITIAL_OFFSET;
-      splash.y = this.y;
-      splash.y -= INITIAL_OFFSET;
-      splash.y += 0;
+      splash.x = this.x + getXPos(direction) + INITIAL_OFFSET;
+      splash.y = this.y - INITIAL_OFFSET;
     }
   }
 
@@ -667,15 +663,10 @@ class Strumline extends FlxSpriteGroup
 
       cover.playStart();
 
-      cover.x = this.x;
-      cover.x += getXPos(holdNote.noteDirection);
-      cover.x += STRUMLINE_SIZE / 2;
-      cover.x -= cover.width / 2;
+      cover.x = this.x + getXPos(holdNote.noteDirection) + (STRUMLINE_SIZE - cover.width) / 2;
       cover.x += -12; // Manual tweaking because fuck.
 
-      cover.y = this.y;
-      cover.y += INITIAL_OFFSET;
-      cover.y += STRUMLINE_SIZE / 2;
+      cover.y = this.y + INITIAL_OFFSET + STRUMLINE_SIZE / 2;
       cover.y += -96; // Manual tweaking because fuck.
     }
   }
