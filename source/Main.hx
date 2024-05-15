@@ -100,7 +100,7 @@ class Main extends Sprite
     Save.load();
 
     // fix for vanilla save data
-    if (framerate == null) framerate = FlxMath.minInt(60, Save.instance.options.framerate);
+    if (framerate == null) framerate = FlxMath.maxInt(60, Save.instance.options.framerate);
 
     var game:FlxGame = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, startFullscreen);
 
