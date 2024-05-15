@@ -832,6 +832,8 @@ class PlayState extends MusicBeatSubState
 
       resetCamera();
 
+      var fromDeathState = isPlayerDying;
+
       persistentUpdate = true;
       persistentDraw = true;
 
@@ -873,8 +875,11 @@ class PlayState extends MusicBeatSubState
 
       if (currentStage != null) currentStage.resetStage();
 
-      playerStrumline.vwooshNotes();
-      opponentStrumline.vwooshNotes();
+      if (!fromDeathState)
+      {
+        playerStrumline.vwooshNotes();
+        opponentStrumline.vwooshNotes();
+      }
 
       playerStrumline.clean();
       opponentStrumline.clean();
@@ -1085,6 +1090,22 @@ class PlayState extends MusicBeatSubState
 
   function moveToGameOver():Void
   {
+    // Reset and update a bunch of values in advance for the transition back from the game over substate.
+    playerStrumline.clean();
+    opponentStrumline.clean();
+
+    songScore = 0;
+    updateScoreText();
+
+    health = Constants.HEALTH_STARTING;
+    healthLerp = health;
+
+    healthBar.value = healthLerp;
+
+    iconP1.updatePosition();
+    iconP2.updatePosition();
+
+    // Transition to the game over substate.
     var gameOverSubState = new GameOverSubState(
       {
         isChartingMode: isChartingMode,
