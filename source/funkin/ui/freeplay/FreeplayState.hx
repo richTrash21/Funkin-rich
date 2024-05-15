@@ -893,7 +893,6 @@ class FreeplayState extends MusicBeatSubState
       spamTimer = 0;
     }
 
-    #if !html5
     if (FlxG.mouse.wheel != 0)
     {
       dj.resetAFKTimer();
@@ -903,7 +902,6 @@ class FreeplayState extends MusicBeatSubState
       changeSelection(-FlxG.mouse.wheel);
       #end
     }
-    #end
 
     if (controls.UI_LEFT_P && !FlxG.keys.pressed.CONTROL)
     {
