@@ -442,15 +442,16 @@ class BaseCharacter extends Bopper
     return switch (player)
     {
       case 1:
-        return PlayerSettings.player1.controls.NOTE_LEFT_P
-          || PlayerSettings.player1.controls.NOTE_DOWN_P
-          || PlayerSettings.player1.controls.NOTE_UP_P
-          || PlayerSettings.player1.controls.NOTE_RIGHT_P;
+        PlayerSettings.player1.controls.NOTE_LEFT_P
+        || PlayerSettings.player1.controls.NOTE_DOWN_P
+        || PlayerSettings.player1.controls.NOTE_UP_P
+        || PlayerSettings.player1.controls.NOTE_RIGHT_P;
       case 2:
-        return PlayerSettings.player2.controls.NOTE_LEFT_P
-          || PlayerSettings.player2.controls.NOTE_DOWN_P
-          || PlayerSettings.player2.controls.NOTE_UP_P
-          || PlayerSettings.player2.controls.NOTE_RIGHT_P;
+        PlayerSettings.player2.controls.NOTE_LEFT_P
+        || PlayerSettings.player2.controls.NOTE_DOWN_P
+        || PlayerSettings.player2.controls.NOTE_UP_P
+        || PlayerSettings.player2.controls.NOTE_RIGHT_P;
+      default: false;
     }
   }
 
@@ -465,15 +466,16 @@ class BaseCharacter extends Bopper
     return switch (player)
     {
       case 1:
-        return PlayerSettings.player1.controls.NOTE_LEFT
-          || PlayerSettings.player1.controls.NOTE_DOWN
-          || PlayerSettings.player1.controls.NOTE_UP
-          || PlayerSettings.player1.controls.NOTE_RIGHT;
+        PlayerSettings.player1.controls.NOTE_LEFT
+        || PlayerSettings.player1.controls.NOTE_DOWN
+        || PlayerSettings.player1.controls.NOTE_UP
+        || PlayerSettings.player1.controls.NOTE_RIGHT;
       case 2:
-        return PlayerSettings.player2.controls.NOTE_LEFT
-          || PlayerSettings.player2.controls.NOTE_DOWN
-          || PlayerSettings.player2.controls.NOTE_UP
-          || PlayerSettings.player2.controls.NOTE_RIGHT;
+        PlayerSettings.player2.controls.NOTE_LEFT
+        || PlayerSettings.player2.controls.NOTE_DOWN
+        || PlayerSettings.player2.controls.NOTE_UP
+        || PlayerSettings.player2.controls.NOTE_RIGHT;
+      default: false;
     }
   }
 
