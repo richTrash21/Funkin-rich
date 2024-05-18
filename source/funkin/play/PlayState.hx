@@ -692,7 +692,7 @@ class PlayState extends MusicBeatSubState
     comboPopUps = new PopUpStuff();
     comboPopUps.zIndex = 900;
     add(comboPopUps);
-    comboPopUps.cameras = [camHUD];
+    // comboPopUps.cameras = [camHUD];
 
     #if discord_rpc
     // Initialize Discord Rich Presence.
@@ -707,7 +707,7 @@ class PlayState extends MusicBeatSubState
 
     initPreciseInputs();
 
-    FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
+    // FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
     // The song is loaded and in the process of starting.
     // This gets set back to false when the chart actually starts.
@@ -2168,7 +2168,7 @@ class PlayState extends MusicBeatSubState
 
         // We dropped a hold note.
         // Play miss animation, but don't penalize.
-        currentStage.getOpponent().playSingAnimation(holdNote.noteData.getDirection(), true);
+        currentStage.getDad().playSingAnimation(holdNote.noteData.getDirection(), true);
       }
     }
 
@@ -2280,8 +2280,8 @@ class PlayState extends MusicBeatSubState
         holdNote.handledMiss = true;
 
         // Mute vocals and play miss animation, but don't penalize.
-        // vocals.playerVolume = 0;
-        // if (currentStage != null && currentStage.getBoyfriend() != null) currentStage.getBoyfriend().playSingAnimation(holdNote.noteData.getDirection(), true);
+        vocals.playerVolume = 0;
+        if (currentStage != null && currentStage.getBoyfriend() != null) currentStage.getBoyfriend().playSingAnimation(holdNote.noteData.getDirection(), true);
       }
     }
   }

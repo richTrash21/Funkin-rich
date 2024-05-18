@@ -8,6 +8,7 @@ import flixel.util.FlxSort;
 import funkin.play.notes.NoteSprite;
 import funkin.data.song.SongData.SongEventData;
 import funkin.data.song.SongData.SongNoteData;
+import funkin.play.components.PopUpStuff.PopUpSprite;
 
 /**
  * Utility functions related to sorting.
@@ -35,8 +36,7 @@ class SortUtil
    */
   public static inline function byZIndex(order:Int, a:FlxBasic, b:FlxBasic):Int
   {
-    if (a == null || b == null) return 0;
-    return FlxSort.byValues(order, a.zIndex, b.zIndex);
+    return (a == null || b == null) ? 0 : FlxSort.byValues(order, a.zIndex, b.zIndex);
   }
 
   /**
@@ -156,7 +156,11 @@ class SortUtil
    */
   public static inline function byID(order:Int, a:FlxBasic, b:FlxBasic):Int
   {
-    if (a == null || b == null) return 0;
-    return FlxSort.byValues(order, a.ID, b.ID);
+    return (a == null || b == null) ? 0 : FlxSort.byValues(order, a.ID, b.ID);
+  }
+
+  public static inline function byOrder(order:Int, a:PopUpSprite, b:PopUpSprite):Int
+  {
+    return (a == null || b == null) ? 0 : FlxSort.byValues(order, a.order, b.order);
   }
 }

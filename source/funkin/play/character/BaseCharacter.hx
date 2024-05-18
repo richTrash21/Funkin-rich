@@ -487,13 +487,7 @@ class BaseCharacter extends Bopper
   {
     super.onNoteHit(event);
 
-    if (event.note.noteData.getMustHitNote() && characterType == BF)
-    {
-      // If the note is from the same strumline, play the sing animation.
-      this.playSingAnimation(event.note.noteData.getDirection(), false);
-      holdTimer = 0;
-    }
-    else if (!event.note.noteData.getMustHitNote() && characterType == DAD)
+    if ((event.note.noteData.getMustHitNote() && characterType == BF) || (!event.note.noteData.getMustHitNote() && characterType == DAD))
     {
       // If the note is from the same strumline, play the sing animation.
       this.playSingAnimation(event.note.noteData.getDirection(), false);
@@ -509,12 +503,7 @@ class BaseCharacter extends Bopper
   {
     super.onNoteMiss(event);
 
-    if (event.note.noteData.getMustHitNote() && characterType == BF)
-    {
-      // If the note is from the same strumline, play the sing animation.
-      this.playSingAnimation(event.note.noteData.getDirection(), true);
-    }
-    else if (!event.note.noteData.getMustHitNote() && characterType == DAD)
+    if ((event.note.noteData.getMustHitNote() && characterType == BF) || (!event.note.noteData.getMustHitNote() && characterType == DAD))
     {
       // If the note is from the same strumline, play the sing animation.
       this.playSingAnimation(event.note.noteData.getDirection(), true);
@@ -574,9 +563,11 @@ class BaseCharacter extends Bopper
    * @param miss If true, play the miss animation instead of the sing animation.
    * @param suffix A suffix to append to the animation name, like `alt`.
    */
-  public function playSingAnimation(dir:NoteDirection, miss:Bool = false, ?suffix:String = ''):Void
+  public function playSingAnimation(dir:NoteDirection, miss:Bool = false, ?suffix:String):Void
   {
-    var anim:String = 'sing${dir.nameUpper}${miss ? 'miss' : ''}${suffix != '' ? '-${suffix}' : ''}';
+    var anim:String = 'sing' + dir.nameUpper;
+    if (miss) anim += 'miss';
+    if (suffix != null && suffix.length != 0) anim += '-$suffix';
 
     // restart even if already playing, because the character might sing the same note twice.
     playAnimation(anim, true);
