@@ -131,6 +131,25 @@ class Preferences
   }
 
   /**
+   * Controls where will combo render.
+   * @default `false`
+   */
+  public static var comboHUD(get, set):Bool;
+
+  static function get_comboHUD():Bool
+  {
+    return Save?.instance?.options?.comboHUD;
+  }
+
+  static function set_comboHUD(value:Bool):Bool
+  {
+    var save:Save = Save.instance;
+    save.options.comboHUD = value;
+    save.flush();
+    return value;
+  }
+
+  /**
    * If enabled, an FPS and memory counter will be displayed even if this is not a debug build.
    * @default `false`
    */

@@ -692,7 +692,7 @@ class PlayState extends MusicBeatSubState
     comboPopUps = new PopUpStuff();
     comboPopUps.zIndex = 900;
     add(comboPopUps);
-    // comboPopUps.cameras = [camHUD];
+    if (Preferences.comboHUD) comboPopUps.cameras = [camHUD];
 
     #if discord_rpc
     // Initialize Discord Rich Presence.
@@ -714,7 +714,7 @@ class PlayState extends MusicBeatSubState
     startingSong = true;
 
     // TODO: We hardcoded the transition into Winter Horrorland. Do this with a ScriptedSong instead.
-    if ((currentSong?.id ?? '').toLowerCase() == 'winter-horrorland')
+    if (currentSong?.id != null && currentSong.id.toLowerCase() == 'winter-horrorland')
     {
       // VanillaCutscenes will call startCountdown later.
       VanillaCutscenes.playHorrorStartCutscene();

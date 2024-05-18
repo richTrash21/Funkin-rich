@@ -140,6 +140,10 @@ class PreferencesMenu extends Page
       Preferences.zoomCamera = value;
     }, Preferences.zoomCamera);
 
+    createPrefItemCheckbox('Display Combo on HUD', 'Self explanatory', function(value:Bool):Void {
+      Preferences.comboHUD = value;
+    }, Preferences.comboHUD);
+
     createPrefItemCheckbox('Debug Display', 'Enable to show FPS and other debug stats', function(value:Bool):Void {
       Preferences.debugDisplay = value;
     }, Preferences.debugDisplay);

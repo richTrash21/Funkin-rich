@@ -57,78 +57,82 @@ class Save
 
   public static function getDefault():RawSaveData
   {
-    return {
-      version: Save.SAVE_DATA_VERSION,
+    final s:RawSaveData =
+      {
+        version: Save.SAVE_DATA_VERSION,
 
-      volume: 1.0,
-      mute: false,
+        volume: 1.0,
+        mute: false,
 
-      api:
-        {
-          newgrounds:
-            {
-              sessionId: null,
-            }
-        },
-      scores:
-        {
-          // No saved scores.
-          levels: [],
-          songs: [],
-        },
-      options:
-        {
-          // Reasonable defaults.
-          naughtyness: true,
-          downscroll: false,
-          ghostTapping: false,
-          // improvised v-sync
-          framerate: #if web 60 #else flixel.math.FlxMath.maxInt(60, lime.app.Application.current.window.displayMode.refreshRate) #end,
-          flashingLights: true,
-          zoomCamera: true,
-          debugDisplay: false,
-          autoPause: true,
-          inputOffset: 0,
-          audioVisualOffset: 0,
+        api:
+          {
+            newgrounds:
+              {
+                sessionId: null,
+              }
+          },
+        scores:
+          {
+            // No saved scores.
+            levels: [],
+            songs: [],
+          },
+        options:
+          {
+            // Reasonable defaults.
+            naughtyness: true,
+            downscroll: false,
+            ghostTapping: false,
+            // improvised v-sync
+            framerate: 60,
+            flashingLights: true,
+            zoomCamera: true,
+            comboHUD: false,
+            debugDisplay: false,
+            autoPause: true,
+            inputOffset: 0,
+            audioVisualOffset: 0,
 
-          controls:
-            {
-              // Leave controls blank so defaults are loaded.
-              p1:
-                {
-                  keyboard: {},
-                  gamepad: {},
-                },
-              p2:
-                {
-                  keyboard: {},
-                  gamepad: {},
-                },
-            },
-        },
+            controls:
+              {
+                // Leave controls blank so defaults are loaded.
+                p1:
+                  {
+                    keyboard: {},
+                    gamepad: {},
+                  },
+                p2:
+                  {
+                    keyboard: {},
+                    gamepad: {},
+                  },
+              },
+          },
 
-      mods:
-        {
-          // No mods enabled.
-          enabledMods: [],
-          modOptions: [],
-        },
+        mods:
+          {
+            // No mods enabled.
+            enabledMods: [],
+            modOptions: [],
+          },
 
-      optionsChartEditor:
-        {
-          // Reasonable defaults.
-          previousFiles: [],
-          noteQuant: 3,
-          chartEditorLiveInputStyle: ChartEditorLiveInputStyle.None,
-          theme: ChartEditorTheme.Light,
-          playtestStartTime: false,
-          downscroll: false,
-          metronomeVolume: 1.0,
-          hitsoundVolumePlayer: 1.0,
-          hitsoundVolumeOpponent: 1.0,
-          themeMusic: true
-        },
-    };
+        optionsChartEditor:
+          {
+            // Reasonable defaults.
+            previousFiles: [],
+            noteQuant: 3,
+            chartEditorLiveInputStyle: ChartEditorLiveInputStyle.None,
+            theme: ChartEditorTheme.Light,
+            playtestStartTime: false,
+            downscroll: false,
+            metronomeVolume: 1.0,
+            hitsoundVolumePlayer: 1.0,
+            hitsoundVolumeOpponent: 1.0,
+            themeMusic: true
+          },
+      };
+    #if !web s.options.framerate = flixel.math.FlxMath.maxInt(60, lime.app.Application.current.window.displayMode.refreshRate); #end
+    return s;
   }
 
   /**
@@ -873,6 +877,12 @@ typedef SaveDataOptions =
    * @default `false`
    */
   var zoomCamera:Bool;
+
+  /**
+   * Controls where will combo render.
+   * @default `false`
+   */
+  var comboHUD:Bool;
 
   /**
    * If enabled, an FPS and memory counter will be displayed even if this is not a debug build.
